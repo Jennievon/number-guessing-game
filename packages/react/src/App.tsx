@@ -13,6 +13,7 @@ import {
   Routes,
   useRoutes,
 } from "react-router-dom";
+import Guess from "./views/Guess";
 const _404Page = React.lazy(() => import("./views/View404"));
 const ErrorBoundary = React.lazy(() => import("./components/ErrorBoundary"));
 
@@ -27,6 +28,7 @@ const RouterView = () => {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/guess" element={<Guess />} />
                     <Route path="*" element={<_404Page />} />
                   </Routes>
                 </Layout>

@@ -5,6 +5,19 @@ module.exports = {
   media: false, // or 'media' or 'class'
   theme: {
     extend: {
+      keyframes: {
+        rotate: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+          "100%": {
+            transform: "rotate(359deg)",
+          },
+        },
+      },
+      animation: {
+        rotate: "rotate 2s linear infinite",
+      },
       fontFamily: {
         display: ['"DM Sans"', "sans-serif"],
       },
@@ -16,11 +29,6 @@ module.exports = {
       },
       width: {
         375: "375px",
-      },
-      height: {
-        "no-header": "calc(100vh - 70px)",
-        "80vh": "80vh",
-        modal: "634px",
       },
       maxWidth: {
         240: "240px",

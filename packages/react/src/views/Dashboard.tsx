@@ -5,14 +5,15 @@ import { useSnackbar } from "notistack";
 import { useWalletConnection } from "../contexts/WalletConnectionContext";
 import { useERC20 } from "../contexts/ERC20Context";
 import { useGuess } from "../contexts/GuessContext";
+import Button from "../components/Buttons";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-  const { walletAddress } = useWalletConnection();
-  const { erc20Contract, symbol, approve } = useERC20();
-  const { guessContract, guess } = useGuess();
+  const navigate = useNavigate();
+  const { walletAddress, accountBalance } = useWalletConnection();
+  const { erc20Contract, symbol } = useERC20();
+  const { guessContract } = useGuess();
   const { enqueueSnackbar } = useSnackbar();
-  const [amount, setAmount] = useState("");
-  const [userGuess, setUserGuess] = useState("");
   const [allowance, setAllowance] = useState(ethers.BigNumber.from(0));
 
   useEffect(() => {
@@ -28,10 +29,6 @@ function Dashboard() {
 
       erc20Contract.on(filterApproval, (owner, _, value) => {
         setAllowance(value);
-        console.log(
-          "🚀 ~ file: Dashboard.tsx:28 ~ erc20Contract.on ~ value:",
-          value
-        );
         enqueueSnackbar(
           `Approval of ${ethers.utils.formatEther(
             value
@@ -52,81 +49,49 @@ function Dashboard() {
     }
   }, [erc20Contract, guessContract, walletAddress]);
 
-  const handleGuess = () => {
-    const input = parseInt(userGuess);
-    if (isNaN(input)) {
-      enqueueSnackbar("Please enter a valid number.", { variant: "error" });
-      return;
-    }
-    if (input < 1) {
-      enqueueSnackbar("Please enter a number greater than 0.", {
-        variant: "error",
-      });
-      return;
-    }
-    guess(input);
-    setUserGuess("");
-  };
-
-  const handleApproval = async () => {
-    if (!guessContract) {
-      console.log(
-        "🚀 ~ file: Dashboard.tsx:73 ~ handleApproval ~ guessContract:",
-        guessContract
-      );
-      return;
-    }
-    try {
-      const num = allowance.add(ethers.utils.parseEther(amount));
-      await approve(num, guessContract.address);
-      setAmount("");
-    } catch (error: any) {
-      enqueueSnackbar("Error while attempting to approve: " + error.message);
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-4">Number Guessing Game</h1>
-      <p>
-        You have {formatEther(allowance)} {symbol} for guesses.
-      </p>
-      <div className="flex items-center mb-4">
-        <label className="mr-2">
-          Choose the number of guesses you want to buy:
-        </label>
-        <input
-          type="number"
-          className="p-2 border rounded mr-2"
-          placeholder="Enter number of guesses"
-          value={amount}
-          min={0}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={handleApproval}
-        >
-          Approve game fee
-        </button>
+    <div>
+      <div className="flex flex-col items-center justify-center w-full px-4 py-2 rounded-lg mb-4 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg min-h-[100px]">
+        <h3 className="text-white text-xl mb-2">
+          <span className="text-2xl">
+            {accountBalance} {symbol}
+          </span>
+        </h3>
+        <h3 className="text-white">
+          {parseFloat(formatEther(allowance))} more guess(es)
+        </h3>
       </div>
-      <div className="flex mb-4">
-        <input
-          type="number"
-          className="p-2 border rounded mr-2"
-          placeholder="Enter your guess"
-          value={userGuess}
-          min={0}
-          onChange={(e) => setUserGuess(e.target.value)}
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={handleGuess}
-          disabled={parseFloat(formatEther(allowance)) < parseFloat(amount)}
-        >
-          Guess
-        </button>
-      </div>
+
+      <Button
+        primary
+        rounded
+        className="w-full mb-4"
+        onClick={() => navigate("/guess")}
+      >
+        <span className="text-14 font-normal px-6">Guess</span>
+      </Button>
+
+      {/* <div className="overflow-auto max-h-[350px] bg-gray-900 rounded-lg p-4">
+            {transactions.map((item: Transaction, index: number) => (
+              <div
+                className="bg-gray-800 rounded-lg p-4 flex justify-between items-center mb-2"
+                key={index}
+              >
+                <div>
+                  <h4 className="text-white text-sm">Sent Ether</h4>
+                  <p className="text-gray-400 text-xs">
+                    {item.date} {item.time}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-red-500 text-sm">-{item.amount} ETH</h4>
+                  <p className="text-red-500 text-xs">
+                    -${item.fiatAmount} USD
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div> */}
     </div>
   );
 }

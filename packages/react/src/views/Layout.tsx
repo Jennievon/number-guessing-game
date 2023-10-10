@@ -15,7 +15,14 @@ function Layout({ children }: { children: React.ReactNode }) {
     >
       <Header />
 
-      <main className="container mx-auto py-8">{children}</main>
+      <main className="flex flex-col items-center h-screen p-4">
+        <div
+          className="rounded-lg overflow-hidden shadow-md w-[375px] max-w-full mx-4 bg-green-900 
+      min-h-[700px] p-4"
+        >
+          {children}
+        </div>
+      </main>
 
       <div className="fixed bottom-4 right-4">
         <ThemeToggle />

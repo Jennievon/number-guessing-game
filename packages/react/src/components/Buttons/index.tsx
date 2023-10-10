@@ -7,6 +7,7 @@ const Button = ({
   primary,
   rounded,
   onClick,
+  disabled,
   ...props
 }: {
   className?: string;
@@ -14,22 +15,24 @@ const Button = ({
   loading?: boolean;
   primary?: boolean;
   rounded?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }) => {
-  const baseButtonClasses = "font-bold py-2 px-4";
+  const baseButtonClasses =
+    "px-6 py-2 font-normal text-14 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105";
   const buttonClasses = ` ${baseButtonClasses} ${
     primary
-      ? "bg-blue-500 hover:bg-blue-700 text-white"
-      : "bg-gray-300 hover:bg-gray-400 text-gray-700"
-  } ${rounded ? "rounded" : ""}`;
-  const loadingClasses = "bg-gray-400 cursor-not-allowed";
+      ? "bg-blue-500 text-white px-4 py-2 hover:bg-blue-600"
+      : "bg-gray-200 text-gray-900 px-4 py-2 hover:bg-gray-300"
+  } ${rounded ? "rounded-full" : "rounded-lg"} `;
+  const disabledClasses = "opacity-50 cursor-not-allowed";
 
   return (
     <button
       className={`${buttonClasses} ${
-        loading ? loadingClasses : ""
-      } ${className}`}
-      disabled={loading}
+        loading ? disabledClasses + "animate-rotate" : ""
+      } ${disabled ? disabledClasses : "cursor-pointer"} ${className}`}
+      disabled={loading || disabled}
       onClick={onClick}
       {...props}
     >

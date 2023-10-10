@@ -12,6 +12,7 @@ interface WalletConnectionContextType {
   disconnectWallet: () => void;
   signer: ethers.Signer | null;
   signerAddress: string;
+  accountBalance: string;
 }
 
 export const useWalletConnection = () => {
@@ -33,6 +34,7 @@ export const WalletConnectionProvider = ({
 }: WalletConnectionProviderProps) => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
+  const [accountBalance, setAccountBalance] = useState("");
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
@@ -86,6 +88,28 @@ export const WalletConnectionProvider = ({
     setWalletAddress("");
   };
 
+  const getBalance = async () => {
+    try {
+      if (typeof (window as any).ethereum === "undefined") {
+        return;
+      } else {
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        let balance: any = await provider.getBalance(walletAddress);
+        balance = parseFloat(ethers.utils.formatEther(balance));
+
+        setAccountBalance(balance.toFixed(6));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, [walletAddress]);
+
   const walletConnectionContextValue: WalletConnectionContextType = {
     walletConnected,
     walletAddress,
@@ -93,6 +117,7 @@ export const WalletConnectionProvider = ({
     disconnectWallet,
     signer,
     signerAddress: walletAddress,
+    accountBalance,
   };
 
   return (
