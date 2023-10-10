@@ -1,0 +1,38 @@
+{
+    "name": "number-guessing-game",
+    "version": "1.0.0",
+    "description": "Custom Celo Composer project.",
+    "private": true,
+    "author": "Celo",
+    "license": "MIT",
+    "scripts": {
+        "react-app:dev": "yarn workspace @number-guessing-game/react-app dev",
+        "react-app:build": "yarn workspace @number-guessing-game/react-app build",
+        "react-app:start": "yarn workspace @number-guessing-game/react-app start",
+        "react-app:lint": "yarn workspace @number-guessing-game/react-app lint",
+        "hardhat:test": "yarn workspace @number-guessing-game/hardhat test",
+        "hardhat:test-local": "yarn workspace @number-guessing-game/hardhat test-local",
+        "hardhat:create-account": "yarn workspace @number-guessing-game/hardhat create-account",
+        "hardhat:accounts": "yarn workspace @number-guessing-game/hardhat accounts",
+        "hardhat:devchain": "yarn workspace @number-guessing-game/hardhat devchain",
+        "hardhat:deploy": "yarn workspace @number-guessing-game/hardhat deploy",
+        "hardhat:deploy-reset-watch": "yarn workspace @number-guessing-game/hardhat deploy-reset-watch",
+        "hardhat:watch": "yarn workspace @number-guessing-game/hardhat watch",
+        "hardhat:fork-mainnet": "yarn workspace @number-guessing-game/hardhat fork-mainnet"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/celo-org/celo-composer.git"
+    },
+    "bugs": {
+        "url": "https://github.com/celo-org/celo-composer/issues"
+    },
+    "homepage": "https://github.com/celo-org/celo-composer/blob/main/README.md",
+    "workspaces": [
+        "packages/*"
+    ],
+    "keywords": [
+        "celo-composer",
+        "celo"
+    ]
+}

@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Dm Sans", monospace;
+}
+
+body {
+  --bg-primary: #ffffff;
+  --bg-secondary: #edf2f7;
+  --text-primary: #000000;
+  --text-secondary: #2d3748;
+}
