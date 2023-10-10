@@ -1,16 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Guess from "../artifacts/contracts/Guess.sol/Guess.json";
-import { useERC20 } from "./ERC20Context";
 import { useWalletConnection } from "./WalletConnectionContext";
 import { Constants } from "../libs/utils/constants";
+import { GuessContextType, GuessProviderProps } from "../libs/types";
 
 const GuessContext = createContext<GuessContextType | undefined>(undefined);
-
-interface GuessContextType {
-  guessContract: ethers.Contract | null;
-  guess: (guessInput: number) => Promise<void>;
-}
 
 export const useGuess = () => {
   const context = useContext(GuessContext);
@@ -19,10 +14,6 @@ export const useGuess = () => {
   }
   return context;
 };
-
-interface GuessProviderProps {
-  children: React.ReactNode;
-}
 
 export const GuessProvider = ({ children }: GuessProviderProps) => {
   const { signer } = useWalletConnection();

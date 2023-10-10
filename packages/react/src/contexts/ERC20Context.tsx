@@ -1,16 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import ERC20 from "../artifacts/contracts/ERC20.sol/ERC20.json";
 import { useWalletConnection } from "./WalletConnectionContext";
 import { Constants } from "../libs/utils/constants";
+import { ERC20ContextType, ERC20ProviderProps } from "../libs/types";
 
 const ERC20Context = createContext<ERC20ContextType | undefined>(undefined);
-
-interface ERC20ContextType {
-  erc20Contract: ethers.Contract | null;
-  approve: (amount: ethers.BigNumber, address: string) => Promise<void>;
-  symbol: string;
-}
 
 export const useERC20 = () => {
   const context = useContext(ERC20Context);
@@ -19,10 +14,6 @@ export const useERC20 = () => {
   }
   return context;
 };
-
-interface ERC20ProviderProps {
-  children: React.ReactNode;
-}
 
 export const ERC20Provider = ({ children }: ERC20ProviderProps) => {
   const { signer } = useWalletConnection();

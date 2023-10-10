@@ -1,24 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-
-// Define the type for the context value
-interface ThemeContextType {
-  theme: string;
-  otherTheme: string;
-  toggleTheme: () => void;
-}
+import { createContext, useContext, useState, useEffect } from "react";
+import { ThemeContextType, ThemeProviderProps } from "../libs/types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-// Define the type for the ThemeProvider props
-interface ThemeProviderProps {
-  children: ReactNode;
-}
 
 export function useTheme(): ThemeContextType {
   const context = useContext(ThemeContext);
@@ -29,25 +12,16 @@ export function useTheme(): ThemeContextType {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps): JSX.Element {
-  const [theme, setTheme] = useState<string>(""); // Replace with your desired initial value
+  const [theme, setTheme] = useState<string>("");
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setTheme(savedTheme);
-    } else {
-      setTheme("light"); // Replace with your desired initial value
     }
   }, []);
 
   useEffect(() => {
-    // Apply the theme-related logic here
-    if (theme === "dark") {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-
     localStorage.setItem("theme", theme);
   }, [theme]);
 

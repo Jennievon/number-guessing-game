@@ -10,42 +10,19 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { walletAddress, accountBalance } = useWalletConnection();
+  const { walletAddress, accountBalance, allowance, setAllowance } =
+    useWalletConnection();
   const { erc20Contract, symbol } = useERC20();
   const { guessContract } = useGuess();
   const { enqueueSnackbar } = useSnackbar();
-  const [allowance, setAllowance] = useState(ethers.BigNumber.from(0));
 
   useEffect(() => {
     if (erc20Contract && guessContract) {
-      const filterApproval = erc20Contract.filters.Approval(walletAddress);
-      const filterGuess = guessContract.filters.GuessResult(walletAddress);
-
       erc20Contract
         .allowance(walletAddress, guessContract.address)
         .then((result: ethers.BigNumber) => {
           setAllowance(result);
         });
-
-      erc20Contract.on(filterApproval, (owner, _, value) => {
-        setAllowance(value);
-        enqueueSnackbar(
-          `Approval of ${ethers.utils.formatEther(
-            value
-          )} ${symbol} by account ${owner} to the game was successful.`,
-          { variant: "success" }
-        );
-      });
-
-      guessContract.on(filterGuess, (_, allowance, prize, guess, msg) => {
-        setAllowance(allowance);
-        enqueueSnackbar(
-          `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
-            prize
-          )} OGG.`,
-          { variant: msg === "correct" ? "success" : "error" }
-        );
-      });
     }
   }, [erc20Contract, guessContract, walletAddress]);
 
@@ -63,7 +40,7 @@ function Dashboard() {
       </div>
 
       <Button
-        primary
+        variant="primary"
         rounded
         className="w-full mb-4"
         onClick={() => navigate("/guess")}

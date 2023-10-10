@@ -1,19 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
+import {
+  WalletConnectionContextType,
+  WalletConnectionProviderProps,
+} from "../libs/types";
 
 const WalletConnectionContext = createContext<
   WalletConnectionContextType | undefined
 >(undefined);
-
-interface WalletConnectionContextType {
-  walletConnected: boolean;
-  walletAddress: string;
-  connectWallet: () => Promise<void>;
-  disconnectWallet: () => void;
-  signer: ethers.Signer | null;
-  signerAddress: string;
-  accountBalance: string;
-}
 
 export const useWalletConnection = () => {
   const context = useContext(WalletConnectionContext);
@@ -25,16 +19,14 @@ export const useWalletConnection = () => {
   return context;
 };
 
-interface WalletConnectionProviderProps {
-  children: React.ReactNode;
-}
-
 export const WalletConnectionProvider = ({
   children,
 }: WalletConnectionProviderProps) => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [accountBalance, setAccountBalance] = useState("");
+
+  const [allowance, setAllowance] = useState(ethers.BigNumber.from(0));
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
@@ -90,17 +82,12 @@ export const WalletConnectionProvider = ({
 
   const getBalance = async () => {
     try {
-      if (typeof (window as any).ethereum === "undefined") {
+      if (!provider) {
         return;
-      } else {
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        let balance: any = await provider.getBalance(walletAddress);
-        balance = parseFloat(ethers.utils.formatEther(balance));
-
-        setAccountBalance(balance.toFixed(6));
       }
+      let balance: any = await provider.getBalance(walletAddress);
+      balance = parseFloat(ethers.utils.formatEther(balance));
+      setAccountBalance(balance.toFixed(6));
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +105,8 @@ export const WalletConnectionProvider = ({
     signer,
     signerAddress: walletAddress,
     accountBalance,
+    allowance,
+    setAllowance,
   };
 
   return (

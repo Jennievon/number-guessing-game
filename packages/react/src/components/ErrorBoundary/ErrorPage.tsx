@@ -1,4 +1,4 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../Buttons";
 
 const refreshPage = () => {
@@ -13,7 +13,7 @@ const ErrorPage = (): JSX.Element => {
         <p className="flex justify-center text-12 text-gray400 font-normal mt-2 mb-4">
           Looks like something went wrong, please refresh the page.
         </p>
-        <Button primary rounded onClick={refreshPage}>
+        <Button variant="primary" rounded onClick={refreshPage}>
           <span className="text-14 font-normal px-6">Refresh</span>
         </Button>
       </div>

@@ -4,7 +4,7 @@ const Button = ({
   className,
   children,
   loading,
-  primary,
+  variant,
   rounded,
   onClick,
   disabled,
@@ -13,7 +13,7 @@ const Button = ({
   className?: string;
   children: React.ReactNode;
   loading?: boolean;
-  primary?: boolean;
+  variant?: "primary" | "secondary" | "danger";
   rounded?: boolean;
   disabled?: boolean;
   onClick?: () => void;
@@ -21,9 +21,13 @@ const Button = ({
   const baseButtonClasses =
     "px-6 py-2 font-normal text-14 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105";
   const buttonClasses = ` ${baseButtonClasses} ${
-    primary
-      ? "bg-blue-500 text-white px-4 py-2 hover:bg-blue-600"
-      : "bg-gray-200 text-gray-900 px-4 py-2 hover:bg-gray-300"
+    variant === "primary"
+      ? "bg-blue-500 text-white hover:bg-blue-600"
+      : variant === "secondary"
+      ? "bg-gray-200 text-gray-900 hover:bg-gray-300"
+      : variant === "danger"
+      ? "bg-red-500 text-white hover:bg-red-600"
+      : "bg-gray-200 text-gray-900 hover:bg-gray-300"
   } ${rounded ? "rounded-full" : "rounded-lg"} `;
   const disabledClasses = "opacity-50 cursor-not-allowed";
 

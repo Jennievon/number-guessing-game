@@ -3,8 +3,7 @@ import { useWalletConnection } from "../contexts/WalletConnectionContext";
 import Dashboard from "./Dashboard";
 
 const Home = () => {
-  const { walletConnected, walletAddress, connectWallet } =
-    useWalletConnection();
+  const { walletConnected, connectWallet } = useWalletConnection();
 
   return (
     <div>
