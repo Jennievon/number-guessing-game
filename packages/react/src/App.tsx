@@ -7,14 +7,9 @@ import Home from "./views/Home";
 import { ERC20Provider } from "./contexts/ERC20Context";
 import { GuessProvider } from "./contexts/GuessContext";
 import { WalletConnectionProvider } from "./contexts/WalletConnectionContext";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useRoutes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Guess from "./views/Guess";
-const _404Page = React.lazy(() => import("./views/View404"));
+const Page404 = React.lazy(() => import("./views/View404"));
 const ErrorBoundary = React.lazy(() => import("./components/ErrorBoundary"));
 
 const RouterView = () => {
@@ -29,7 +24,7 @@ const RouterView = () => {
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/guess" element={<Guess />} />
-                    <Route path="*" element={<_404Page />} />
+                    <Route path="*" element={<Page404 />} />
                   </Routes>
                 </Layout>
               </GuessProvider>

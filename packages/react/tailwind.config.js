@@ -57,6 +57,11 @@ module.exports = {
       borderRadius: {
         20: "20px",
       },
+      colors: {
+        brand:
+          "linear-gradient(90deg, rgba(133,255,196,1) 0%, rgba(0,212,255,1) 100%)",
+        dark: "#131118",
+      },
     },
   },
   variants: {

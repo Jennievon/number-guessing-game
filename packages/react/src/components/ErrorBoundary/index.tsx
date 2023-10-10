@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo } from "react";
 import ErrorPage from "./ErrorPage";
 import { Props, State } from "../../libs/types";
 

@@ -17,8 +17,8 @@ function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex flex-col items-center h-screen p-4">
         <div
-          className="rounded-lg overflow-hidden shadow-md w-[375px] max-w-full mx-4 bg-green-900 
-      min-h-[700px] p-4"
+          className="rounded-lg overflow-hidden shadow-md w-[470px] max-w-full m-4 bg-dark
+      min-h-[430px] p-4"
         >
           {children}
         </div>

@@ -1,6 +1,6 @@
 import Button from "../components/Buttons";
 import { useWalletConnection } from "../contexts/WalletConnectionContext";
-import Dashboard from "./Dashboard";
+import Guess from "./Guess";
 
 const Home = () => {
   const { walletConnected, connectWallet } = useWalletConnection();
@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div>
       {walletConnected ? (
-        <Dashboard />
+        <Guess />
       ) : (
         <div>
           <h2>Connect Wallet</h2>

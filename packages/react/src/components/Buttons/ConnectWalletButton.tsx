@@ -10,14 +10,11 @@ const ConnectWalletButton = ({ children }: { children?: React.ReactNode }) => {
     <>
       {children}
       <Button
-        rounded
-        variant={walletConnected ? "danger" : "primary"}
-        className="mr-4 bg"
+        variant={"outline"}
+        className="mr-4"
         onClick={walletConnected ? disconnectWallet : connectWallet}
       >
-        <span className="text-14 font-normal px-6">
-          {walletConnected ? "Disconnect" : "Connect"} Wallet
-        </span>
+        {walletConnected ? "Disconnect" : "Connect"} Wallet
       </Button>
     </>
   );
