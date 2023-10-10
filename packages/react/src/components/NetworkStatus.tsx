@@ -12,10 +12,13 @@ const StyledNetworkStatus = styled.div<{ show: boolean }>`
   transition: transform 0.3s ease-out 0.3s;
 
   ${({ show }) =>
-    show &&
-    css`
-      transform: translate(0%, 0%);
-    `}
+    show
+      ? css`
+          transform: translate(0%, 0%);
+        `
+      : css`
+          transform: translate(100%, 100%);
+        `}
 `;
 
 const MessageContent = (

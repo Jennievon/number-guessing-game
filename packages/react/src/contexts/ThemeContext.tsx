@@ -1,16 +1,14 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
   useEffect,
   ReactNode,
-  Dispatch,
-  SetStateAction,
 } from "react";
 
 // Define the type for the context value
 interface ThemeContextType {
-  theme: string; // Replace with your desired type
+  theme: string;
   otherTheme: string;
   toggleTheme: () => void;
 }
@@ -38,7 +36,6 @@ export function ThemeProvider({ children }: ThemeProviderProps): JSX.Element {
     if (savedTheme) {
       setTheme(savedTheme);
     } else {
-      // Set an initial value if no theme is found in localStorage
       setTheme("light"); // Replace with your desired initial value
     }
   }, []);

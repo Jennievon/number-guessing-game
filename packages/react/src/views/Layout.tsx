@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import ThemeToggle from "../components/ThemeToggle";
 import Header from "../components/Header";
@@ -9,7 +9,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className={`bg-${isDarkMode ? "gray-900" : "white"} text-${
+      className={`min-h-screen bg-${isDarkMode ? "gray-900" : "white"} text-${
         isDarkMode ? "white" : "gray-900"
       } transition-colors duration-500`}
     >

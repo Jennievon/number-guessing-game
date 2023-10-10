@@ -1,0 +1,103 @@
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { ethers } from "ethers";
+
+const WalletConnectionContext = createContext<
+  WalletConnectionContextType | undefined
+>(undefined);
+
+interface WalletConnectionContextType {
+  walletConnected: boolean;
+  walletAddress: string;
+  connectWallet: () => Promise<void>;
+  disconnectWallet: () => void;
+  signer: ethers.Signer | null;
+  signerAddress: string;
+}
+
+export const useWalletConnection = () => {
+  const context = useContext(WalletConnectionContext);
+  if (!context) {
+    throw new Error(
+      "useWalletConnection must be used within a WalletConnectionProvider"
+    );
+  }
+  return context;
+};
+
+interface WalletConnectionProviderProps {
+  children: React.ReactNode;
+}
+
+export const WalletConnectionProvider = ({
+  children,
+}: WalletConnectionProviderProps) => {
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState("");
+  const [signer, setSigner] = useState<ethers.Signer | null>(null);
+  const [provider, setProvider] =
+    useState<ethers.providers.Web3Provider | null>(null);
+
+  useEffect(() => {
+    const initWalletConnection = async () => {
+      if ((window as any).ethereum) {
+        const ethProvider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        setProvider(ethProvider);
+
+        try {
+          await ethProvider.send("eth_requestAccounts", []);
+          const signer = ethProvider.getSigner();
+          const address = await signer.getAddress();
+          setSigner(signer);
+          setWalletAddress(address);
+          setWalletConnected(true);
+        } catch (error) {
+          console.error("Error connecting to wallet:", error);
+        }
+      }
+    };
+
+    initWalletConnection();
+  }, []);
+
+  const connectWallet = async () => {
+    if (!provider) {
+      console.error("MetaMask is not installed.");
+      return;
+    }
+
+    try {
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      setWalletAddress(address);
+      setWalletConnected(true);
+    } catch (error) {
+      console.error("Error connecting to wallet:", error);
+    }
+  };
+
+  const disconnectWallet = () => {
+    if (provider) {
+      provider.removeAllListeners();
+    }
+    setWalletConnected(false);
+    setWalletAddress("");
+  };
+
+  const walletConnectionContextValue: WalletConnectionContextType = {
+    walletConnected,
+    walletAddress,
+    connectWallet,
+    disconnectWallet,
+    signer,
+    signerAddress: walletAddress,
+  };
+
+  return (
+    <WalletConnectionContext.Provider value={walletConnectionContextValue}>
+      {children}
+    </WalletConnectionContext.Provider>
+  );
+};
