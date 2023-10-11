@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import styled from "styled-components";
 import Button from "../Buttons";
-import Guess from "../../views/Guess";
 
 const StyledInputBlock = styled.div`
   border-bottom: 1px solid #ccc;

@@ -30,16 +30,12 @@ The following steps are required:
 3. Install NPM packages specified in `package.json` by running:
 ```shell
 npm install
-npm install hardhat@esm
+npm install hardhat
 ```
 4. Hardhat and its dependencies will have been installed in the previous step. More details are available at 
-https://hardhat.org/hardhat-runner/docs/getting-started#overview. Once Hardhat is installed, try running some of the 
-following tasks:
+https://hardhat.org/hardhat-runner/docs/getting-started#overview. Once Hardhat is installed, `cd` into the `packages/hardhat` and run:
 ```shell
 npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat help
 ```
 5. An `.env` file should be created in the project root containing the private keys of the two accounts used by the 
 sample, `APP_DEV_PK` and `END_USR_PK`. A third key `CHEAT_PK` can optionally be included to include the PK of an 
@@ -53,7 +49,7 @@ CHEAT_PK=<pk>
 ARB_API_KEY=<key>
 ```
 
-*You can generate private keys at https://iancoleman.io/bip39/I*
+*You can generate private keys at https://iancoleman.io/bip39/m *
 
 ## Running the game against a Hardhat Network
 1. Starting Hardhat with `npx hardhat node` will start a local hardhat network and will deploy the ERC20 token and game 
