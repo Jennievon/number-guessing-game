@@ -43,10 +43,12 @@ export const WalletConnectionProvider = ({
       setProvider(ethProvider);
 
       try {
-        const accounts = await ethProvider.send("eth_requestAccounts", []);
+        await ethProvider.send("eth_requestAccounts", []);
         const signer = ethProvider.getSigner();
-        // const address = accounts[0];
         const address = await signer.getAddress();
+        const balance = await ethProvider.getBalance(address);
+        const formattedBalance = ethers.utils.formatEther(balance);
+        setAccountBalance(formattedBalance);
         setSigner(signer);
         setWalletAddress(address);
         setWalletConnected(true);
@@ -61,31 +63,14 @@ export const WalletConnectionProvider = ({
   const disconnectWallet = () => {
     if (provider) {
       provider.removeAllListeners();
-    }
-    setWalletConnected(false);
-    setWalletAddress(null);
-    setAccountBalance(null);
-    setAllowance(ethers.BigNumber.from(0));
-    setSigner(null);
-    setProvider(null);
-  };
-
-  const getBalance = async () => {
-    if (!walletAddress) return;
-    try {
-      if (provider) {
-        const balance = await provider.getBalance(walletAddress);
-        const formattedBalance = ethers.utils.formatEther(balance);
-        setAccountBalance(formattedBalance);
-      }
-    } catch (error) {
-      console.error("Error getting balance:", error);
+      setWalletConnected(false);
+      setWalletAddress(null);
+      setAccountBalance(null);
+      setAllowance(ethers.BigNumber.from(0));
+      setSigner(null);
+      setProvider(null);
     }
   };
-
-  useEffect(() => {
-    getBalance();
-  }, [walletAddress]);
 
   useEffect(() => {
     const ethereum = (window as any).ethereum;

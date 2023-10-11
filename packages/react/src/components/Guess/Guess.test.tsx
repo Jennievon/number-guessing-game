@@ -7,7 +7,7 @@ describe("Guess Component", () => {
   const setAmount = jest.fn();
   const handleApproval = jest.fn();
   const setUserGuess = jest.fn();
-  const setIsWrongGuess = jest.fn();
+  const guessAgain = jest.fn();
   const walletConnected = true;
   const allowance = BigNumber.from(100);
   const amount = "10";
@@ -25,7 +25,7 @@ describe("Guess Component", () => {
         amount={amount}
         userGuess={userGuess}
         isWrongGuess={false}
-        setIsWrongGuess={setIsWrongGuess}
+        guessAgain={guessAgain}
       />
     );
   };

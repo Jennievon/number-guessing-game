@@ -26,6 +26,10 @@ const StyledInput = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+
+  &::disabled {
+    cursor: not-allowed !important;
+  }
 `;
 
 interface GuessProps {
@@ -38,7 +42,7 @@ interface GuessProps {
   walletConnected: boolean;
   allowance: ethers.BigNumber;
   isWrongGuess: boolean;
-  setIsWrongGuess: (isWrongGuess: boolean) => void;
+  guessAgain: () => void;
 }
 
 const GuessComponent = ({
@@ -51,7 +55,7 @@ const GuessComponent = ({
   walletConnected,
   allowance,
   isWrongGuess = true,
-  setIsWrongGuess,
+  guessAgain,
 }: GuessProps) => {
   return (
     <div className="p-4 flex flex-col justify-between h-full">
@@ -75,6 +79,7 @@ const GuessComponent = ({
               min={0}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              disabled={!walletConnected || isWrongGuess}
             />
             <p className="text-gray-400">
               {allowance ? parseFloat(formatEther(allowance)) : 0} guess(es)
@@ -102,6 +107,11 @@ const GuessComponent = ({
               value={userGuess}
               min={0}
               onChange={(e) => setUserGuess(e.target.value)}
+              disabled={
+                !walletConnected ||
+                (allowance ? parseFloat(formatEther(allowance)) < 1 : false) ||
+                isWrongGuess
+              }
             />
             <p className="text-gray-400">Secret Number</p>
           </StyledInputBlock>
@@ -109,7 +119,7 @@ const GuessComponent = ({
       </div>
       <Button
         rounded
-        onClick={isWrongGuess ? () => setIsWrongGuess(false) : handleGuess}
+        onClick={isWrongGuess ? guessAgain : handleGuess}
         disabled={
           !isWrongGuess &&
           (userGuess === "" ||

@@ -31,7 +31,12 @@ const Guess = () => {
     }
   }, [erc20Contract, guessContract, walletAddress, walletConnected]);
 
-  const handleGuess = () => {
+  const guessAgain = () => {
+    setUserGuess("");
+    setIsWrongGuess(false);
+  };
+
+  const handleGuess = async () => {
     if (!guessContract) return;
 
     const input = parseInt(userGuess);
@@ -43,23 +48,28 @@ const Guess = () => {
     }
 
     const filterGuess = guessContract.filters.GuessResult(walletAddress);
-    guessContract.on(filterGuess, (_, allowance, prize, guess, msg) => {
-      setAllowance(allowance);
-      enqueueSnackbar(
-        `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
-          prize
-        )} ${symbol}.`,
-        { variant: msg === "correct" ? "success" : "error" }
-      );
-      if (msg === "correct") {
-        setShowSuccessModal(true);
-      } else {
-        setIsWrongGuess(true);
-      }
-    });
-
-    guess(input);
-    setUserGuess("");
+    try {
+      await guess(input);
+      guessContract.on(filterGuess, (_, allowance, prize, guess, msg) => {
+        setAllowance(allowance);
+        enqueueSnackbar(
+          `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
+            prize
+          )} ${symbol}.`,
+          { variant: msg === "correct" ? "success" : "error" }
+        );
+        if (msg === "correct") {
+          setShowSuccessModal(true);
+          setUserGuess("");
+        } else {
+          setIsWrongGuess(true);
+        }
+      });
+    } catch (error: any) {
+      enqueueSnackbar("Error while attempting to guess: " + error.message, {
+        variant: "error",
+      });
+    }
   };
 
   const handleApproval = async () => {
@@ -100,7 +110,7 @@ const Guess = () => {
         walletConnected={walletConnected}
         allowance={allowance}
         isWrongGuess={isWrongGuess}
-        setIsWrongGuess={setIsWrongGuess}
+        guessAgain={guessAgain}
       />
       {showSuccessModal && (
         <SuccessModal
