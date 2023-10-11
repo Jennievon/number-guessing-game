@@ -1,197 +1,149 @@
-<!-- TITLE -->
-<p align="center"> 
-  <img width="100px" src="https://github.com/celo-org/celo-composer/blob/main/images/readme/celo_isotype.svg" align="center" alt="Celo" />
- <h2 align="center">Celo Composer</h2>
- <p align="center">Build, deploy, and iterate quickly on decentralized applications using Celo.</p>
-</p>
-  <p align="center">
-    <a href="https://github.com/celo-org/celo-composer/graphs/stars">
-      <img alt="GitHub Contributors" src="https://img.shields.io/github/stars/celo-org/celo-composer?color=FCFF52" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/graphs/contributors">
-      <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/pulls">
-      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://opensource.org/license/mit/">
-      <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-    </a>
-  </p>
-</p>
+# Basic Sample Obscuro Project
 
-<!-- TABLE OF CONTENTS -->
+## Introduction
+This project demonstrates a basic Obscuro use case, which is a simple number guessing game. The contract generates a 
+random secret number when it's deployed, which is never revealed to an operator or end-user because of the privacy 
+benefits of Obscuro. The goal of the game is to guess this number, and each time an attempt is made, an entrance fee of 
+1 token is paid. If a user correctly guesses the number, the contract will pay out all of the accumulated entrance 
+fees to them, and reset itself with a new random number.
 
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+Without Obscuro, it would be possible to look up the internal state of the contract and cheat, and the game wouldn't work. 
 
-<!-- ABOUT THE PROJECT -->
+The contract functionality comes with two contracts; a basic ERC20 contract which allows the user to hold assets and 
+pay the entrance fee to the game, and the game contract itself. This includes a test for that contract, and a sample 
+script that deploys that contract.
 
-## About The Project
+In developing this game, the following tools were used:
+* Git (Source code versioning tool)
+* NPM (Node Package Manager, available on many platforms)
+* NPX (Node Package Execution, used as a runtime for Hardhat tasks)
+* Hardhat (a complete Ethereum compiler and test deployment environment)
+* Ethers.js (a Web3 Javascript library)
+* Vite (a packaging library, handy for compiling Typescript)
+* Metamask (a popular wallet for crypto tokens and smart contract interaction)
+* Obscuro Testnet (an open, permissionless test network for Obscuro)
+* Obscuro Wallet Extension (a proxy for an Obscuro node, which handles encryption for all data between the wallet and the network)
 
-Celo Composer allows you to quickly build, deploy, and iterate on decentralized applications using Celo. It provides a number of frameworks, examples, and Celo specific functionality to help you get started with your next dApp.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Built With
-
-Celo Composer is built on Celo to make it simple to build dApps using a variety of front-end frameworks, and libraries.
-
-- [Celo](https://celo.org/)
-- [Solidity](https://docs.soliditylang.org/en/v0.8.19/)
-- [Next.js](https://nextjs.org/)
-- [React.js](https://reactjs.org/)
-- [Material UI](https://mui.com/)
-- [React Native](https://reactnative.dev/)
-- [Flutter](https://docs.flutter.dev/)
-- [React-celo](https://github.com/celo-org/react-celo/)
-- [Rainbowkit-celo](https://github.com/celo-org/rainbowkit-celo)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
-
-## Prerequisites
-
-- Node
-- Git (v2.38 or higher)
-
-## How to use Celo Composer
-
-The easiest way to start with Celo Composer is using `@celo/celo-composer`. This CLI tool lets you quickly start building dApps on Celo for multiple frameworks, including React (with either react-celo or rainbowkit-celo), React Native (w/o Expo), Flutter, and Angular. To get started, just run the following command, and follow the steps:
-
-```bash
-npx @celo/celo-composer@latest create
+## Environment Setup
+The following steps are required:
+1. Clone this repository into a suitable folder.
+2. Install NPM and NPX, and ensure they are running correctly. This is outside the scope of this project.
+3. Install NPM packages specified in `package.json` by running:
+```shell
+npm install
+npm install hardhat@esm
+```
+4. Hardhat and its dependencies will have been installed in the previous step. More details are available at 
+https://hardhat.org/hardhat-runner/docs/getting-started#overview. Once Hardhat is installed, try running some of the 
+following tasks:
+```shell
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat help
+```
+5. A `.env` file should be created in the project root containing the private keys of the two accounts used by the 
+sample, `APP_DEV_PK` and `END_USR_PK`. A third key `CHEAT_PK` can optionally be included to include the PK of an 
+account that tries to cheat the game using the scripts in `demo-utils`, though this is optional for running of the game
+and primarily used for demo purposes. Should you wish to deploy the game against Arbitrum the API key should also be 
+included, e.g. 
+```shell
+APP_DEV_PK=<pk>
+END_USR_PK=<pk>
+CHEAT_PK=<pk>
+ARB_API_KEY=<key>
 ```
 
-### Front-end framework
+## Running the game against a Hardhat Network
+1. Starting Hardhat with `npx hardhat node` will start a local hardhat network and will deploy the ERC20 token and game 
+contracts. You should take notice of the contract addresses for later. 
 
-![Celo Composer select framework](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_1.png?raw=true)
+![Start Hardhat](./readme-images/hardhat-start.png)
 
-### Web3 library (for react-app)
+2. Set up Metamask with the Hardhat network on `http://127.0.0.1:8545/` with chain ID 1337. 
 
-![Celo Composer select framework](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_2.png?raw=true)
+![Metamask network](./readme-images/metamask-network-0.png)
 
-### Smart contract framework
+3. If not already done, import the accounts into Metamask using the private keys from the `.env` file. Note that you 
+may have to clear activity and nonce data in metamask if you have previously used these accounts against hardhat 
+or any other network. 
 
-![Celo Composer tool selection](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_3.png?raw=true)
+![Metamask import](./readme-images/metamask-import.png)
 
-### Subgraph
+4. Rename the accounts to be more user-friendly.
 
-![Celo Composer subgraph support](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_4.png?raw=true)
+![Metamask accounts](./readme-images/metamask-accounts.png)
 
-### Name your dApp
+5. Edit the [index.ts](./src/index.ts) file to ensure the correct contract addresses are being used. Once done, start
+the user interface for the game using `npm run dev`.
 
-![Celo Composer dApp name](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_5.png?raw=true)
+![User interface start](./readme-images/user-interface-start.png)
 
-**_🔥Voila, you have a dApp ready to go. Voila, you have a dApp ready to go. Start building your dApp on Celo._**
+6. The app is not initially connected to Metamask, and when the page first loads, it should prompt Metamask to pop up 
+and seek connection wth the end-user account (you might want to first completely close your browser before performing). 
+You should approve this.
 
-### Getting started
+![Metamask connect](./readme-images/metamask-connect.png)
 
-Once your custom dApp has been created, just install dependencies, either with `yarn` or `npm i`, and run the respective script from the `package.json` file.
-## Supported Frameworks
+7. After connection, the user interface should now show the address of the game contract and be ready to play. Before 
+playing you must approve the ERC20 contract to allow the game to spend your tokens, using the approve facility on the 
+user interface. 
 
-### React
+![App UI initial](./readme-images/app-ui-initial.png)
 
-- Support for Website and Progressive Web Application.
-- Works with all major crypto wallets.
+8. Approve the game for the number of guesses you want to perform.
 
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/react-app/README.md) to learn more about.
+![Metamask approve](./readme-images/metamask-approve-ogg.png) ![App UI approve response](./readme-images/app-ui-approve-ogg.png)
 
-### React Native
+9. Submit a guess and see if you're correct!
 
-- Out of the box config, just focus on buidl.
-- Support for Android and IOS.
-- Works with and without [Expo](https://expo.dev/).
-- Working example app included.
+![Metamask submit guess](./readme-images/metamask-approve-play.png) ![App UI approve response](./readme-images/app-ui-play.png)
 
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/react-native-app/README.md) to learn more about.
+## Running the game against an Arbitrum Network
+Running the game against Arbitrum follows the same steps as for running against a local Hardhat network, with the
+exception that you have to deploy the game and token contracts first. You should first update the keys to use
+in the [dotenv](./.env) file to values unique to your accounts on Arbitrum and add in the API key to use. Funds should 
+be available on both accounts and can be obtained using the [Arbitrum faucet server](https://faucet.triangleplatform.com/arbitrum/goerli). 
 
-### Flutter
+1. Set up Metamask with the Arbitrum network as described [here](https://docs.alchemy.com/docs/how-to-add-arbitrum-to-metamask).
 
-- One command to get started - Type `flutter run` to start development in your mobile phone.
-- Works with all major mobile crypto wallets.
-- Support for Android, IOS (Web, Windows, and Linux coming soon).
-- Working example app included.
+2. Deploy the contracts using `npx hardhat deploy --network arbitrum` and take a note of the contract addresses from the 
+console.
 
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/flutter-app/README.md) to learn more about.
+3. Update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](./src/index.ts).
 
-### Angular
+4. Follow the steps as described previously to approve tokens to the game, and to make a guess!
 
-- Support for Website and Progressive Web Application.
-- Works with all major crypto wallets.
 
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/angular-app/README.md) to learn more about.
+## Running the game against an Obscuro Network
+Because Obscuro uses the same tools and EVM as Ethereum itself, it should be possible to replay the previous steps with 
+Obscuro's Testnet. As Testnet is not ephemeral for running development like HardHat, you should update the keys to use 
+in the [dotenv](./.env) file to values unique to you. 
 
-<!-- USAGE EXAMPLES -->
+1. Set up Metamask with the Obscuro network as described [here](https://docs.obscu.ro/wallet-extension/configure-metamask).
 
-## 🔭 Learning Solidity
+2. Start up the wallet extension as described [here](https://docs.obscu.ro/wallet-extension/wallet-extension/) and
+generate a viewing key for both the end user accounts and application developer accounts. Note that it is important 
+at the moment that the end user is registered before the application developer due to the way event relevancy checks
+are performed when multiple accounts are registered through a single wallet extension. Because the wallet extension 
+persists viewing keys locally you may want to delete the persistence file at `~/.obscuro/wallet_extension_persistence`
+before starting the wallet extension, and re-register the keys in the correct order. 
 
-📕 Read the docs: <https://docs.soliditylang.org>
+![Wallet start](./readme-images/wallet-start.png)
 
-- [Primitive Data Types](https://solidity-by-example.org/primitives/)
-- [Mappings](https://solidity-by-example.org/mapping/)
-- [Structs](https://solidity-by-example.org/structs/)
-- [Modifiers](https://solidity-by-example.org/function-modifier/)
-- [Events](https://solidity-by-example.org/events/)
-- [Inheritance](https://solidity-by-example.org/inheritance/)
-- [Payable](https://solidity-by-example.org/payable/)
-- [Fallback](https://solidity-by-example.org/fallback/)
+3. When a viewing key is requested, Metamask will ask for permission to connect to the wallet extension "network", and 
+then request the user to sign a "generate viewing key" transaction.
 
-📧 Learn the [Solidity globals and units](https://solidity.readthedocs.io/en/v0.8.19/units-and-global-variables.html)
+![Wallet start](./readme-images/wallet-ephemeral.png)
 
-## Support
+4. Request OBX funds for the two accounts using the [token faucet](https://docs.obscu.ro/testnet/faucet/).
 
-Join the Celo Discord server at <https://chat.celo.org>. Reach out on the dedicated repo channel [here](https://discord.com/channels/600834479145353243/941003424298856448).
+![Faucet](./readme-images/faucet-allocate.png)
 
-<!-- ROADMAP -->
+5. Deploy the contracts to the Obscuro Testnet using `npx hardhat deploy --network obscuro`. Take a note of the contract
+addresses from the console. 
 
-## Roadmap
+6. Confirm and update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](./src/index.ts).
 
-See the [open issues](https://github.com/celo-org/celo-composer/issues) for a full list of proposed features (and known issues).
+7. Follow the steps as described previously to approve tokens to the game, and to make a guess!
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-We welcome contributions from the community.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<!-- CONTACT -->
-## Contact
-
-- [@CeloDevs](https://twitter.com/CeloDevs)
-- [Discord](https://discord.com/invite/celo)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
