@@ -1,7 +1,5 @@
 # Obscuro Number Guessing Game dApp
 
-![Obscuro Logo](link-to-your-logo.png)
-
 ## Overview
 
 This project showcases an exciting Number Guessing Game built on the Obscuro blockchain network. Obscuro's privacy-focused features empower this game by protecting sensitive information, such as the secret number and user guesses, from public visibility. In a transparent, decentralized ecosystem like Ethereum, such privacy is impossible to achieve.
@@ -42,14 +40,14 @@ Building the Obscuro Number Guessing Game tackles both of the scenarios mentione
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-repo.git
-   cd your-repo
+   git clone https://github.com/Jennievon/number-guessing-game.git
+   cd number-guessing-game
    ```
 
 2. Install project dependencies:
 
    ```bash
-   npm install
+   yarn install
    ```
 
 3. Set up a local Ethereum development network (Hardhat):
@@ -58,21 +56,17 @@ Building the Obscuro Number Guessing Game tackles both of the scenarios mentione
    npx hardhat node
    ```
 
-4. Deploy the game contract to your local network:
-
-   ```bash
-   npx hardhat run scripts/deploy.js --network localhost
-   ```
+Ensure you are inside the `packages/hardhat` directory when running this command.
 
 5. Start the React dApp:
 
    ```bash
-   npm start
+   yarn start
    ```
 
 ### Gameplay
 
-1. Connect your Metamask wallet to the application and import the accounts you intend to use.
+1. Connect your Metamask wallet to the application and import the accounts you intend to use as stated in the main [README](https://github.com/Jennievon/number-guessing-game/blob/main/README.md) 
 2. Make sure you have enough tokens in your wallet for the entrance fee.
 3. Open the game interface in your browser.
 4. Click "Play Game" to start the game.
@@ -96,11 +90,3 @@ Building the Obscuro Number Guessing Game tackles both of the scenarios mentione
 
 - [Official Website](https://obscu.ro)
 - [Documentation](https://docs.obscu.ro)
-
-## Disclaimer
-
-This example showcases the basic functionality of Obscuro and may not cover all aspects of a production-ready application. The provided code and documentation should be used as a reference and starting point for your own development efforts.
-
-**Happy Gaming with Obscuro!** 🎉
-
-![Obscuro Logo](link-to-your-logo.png)
