@@ -13,7 +13,6 @@ const ConnectWalletButton = ({ children }: { children?: React.ReactNode }) => {
         variant={"outline"}
         className="mr-4"
         onClick={walletConnected ? disconnectWallet : connectWallet}
-        data-testid={"connect-wallet"}
       >
         {walletConnected ? "Disconnect" : "Connect"} Wallet
       </Button>

@@ -2,12 +2,12 @@ import { ethers } from "ethers";
 
 export interface WalletConnectionContextType {
   walletConnected: boolean;
-  walletAddress: string;
+  walletAddress: string | null;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   signer: ethers.Signer | null;
-  signerAddress: string;
-  accountBalance: string;
+  signerAddress: string | null;
+  accountBalance: string | null;
   allowance: ethers.BigNumber;
   setAllowance: (allowance: ethers.BigNumber) => void;
 }

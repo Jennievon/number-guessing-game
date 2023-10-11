@@ -78,7 +78,8 @@ const GuessComponent = ({
               onChange={(e) => setAmount(e.target.value)}
             />
             <p className="text-gray-400">
-              {parseFloat(formatEther(allowance))} guesses available
+              {allowance ? parseFloat(formatEther(allowance)) : 0} guess(es)
+              available
             </p>
           </StyledInputBlock>
           <Button
@@ -114,7 +115,7 @@ const GuessComponent = ({
           !isWrongGuess &&
           (userGuess === "" ||
             !walletConnected ||
-            parseFloat(formatEther(allowance)) < 1)
+            (allowance ? parseFloat(formatEther(allowance)) < 1 : false))
         }
       >
         {isWrongGuess ? "Guess Again" : "Guess"}

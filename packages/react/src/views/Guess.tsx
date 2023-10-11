@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { formatEther } from "ethers/lib/utils";
 import { useWalletConnection } from "../contexts/WalletConnectionContext";
 import { useSnackbar } from "notistack";
-import Button from "../components/Buttons";
 import { useERC20 } from "../contexts/ERC20Context";
 import { useGuess } from "../contexts/GuessContext";
 import GuessComponent from "../components/Guess/GuessComponent";
@@ -22,6 +20,8 @@ const Guess = () => {
   const [isWrongGuess, setIsWrongGuess] = useState(false);
 
   useEffect(() => {
+    if (!walletConnected) return;
+
     if (erc20Contract && guessContract) {
       erc20Contract
         .allowance(walletAddress, guessContract.address)
@@ -29,7 +29,7 @@ const Guess = () => {
           setAllowance(result);
         });
     }
-  }, [erc20Contract, guessContract, walletAddress]);
+  }, [erc20Contract, guessContract, walletAddress, walletConnected]);
 
   const handleGuess = () => {
     if (!guessContract) return;
@@ -66,7 +66,6 @@ const Guess = () => {
     if (!guessContract || !erc20Contract) return;
 
     const filterApproval = erc20Contract.filters.Approval(walletAddress);
-
     try {
       const num = allowance.add(ethers.utils.parseEther(amount));
       await approve(num, guessContract.address);

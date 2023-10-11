@@ -24,7 +24,6 @@ export const GuessProvider = ({ children }: GuessProviderProps) => {
   useEffect(() => {
     const initGuessContract = async () => {
       if (signer) {
-        console.log("GuessProvider: useEffect");
         const guess = new ethers.Contract(
           Constants.GUESS_ADDRESS,
           Guess.abi,

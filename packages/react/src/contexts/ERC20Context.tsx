@@ -30,8 +30,8 @@ export const ERC20Provider = ({ children }: ERC20ProviderProps) => {
           ERC20.abi,
           signer
         );
-        setSymbol(await erc20.symbol());
         setERC20Contract(erc20);
+        setSymbol(await erc20.symbol());
       }
     };
 
@@ -45,7 +45,7 @@ export const ERC20Provider = ({ children }: ERC20ProviderProps) => {
 
     try {
       const approval = await erc20Contract.approve(address, amount, {
-        gasLimit: 400000,
+        gasLimit: Constants.GAS_LIMIT,
       });
       await approval.wait();
     } catch (error: any) {

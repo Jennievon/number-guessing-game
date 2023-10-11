@@ -5,11 +5,10 @@ import {
   WalletConnectionProviderProps,
 } from "../libs/types";
 
-const WalletConnectionContext = createContext<
-  WalletConnectionContextType | undefined
->(undefined);
+const WalletConnectionContext =
+  createContext<WalletConnectionContextType | null>(null);
 
-export const useWalletConnection = () => {
+export const useWalletConnection = (): WalletConnectionContextType => {
   const context = useContext(WalletConnectionContext);
   if (!context) {
     throw new Error(
@@ -23,52 +22,39 @@ export const WalletConnectionProvider = ({
   children,
 }: WalletConnectionProviderProps) => {
   const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("");
-  const [accountBalance, setAccountBalance] = useState("");
-
-  const [allowance, setAllowance] = useState(ethers.BigNumber.from(0));
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [accountBalance, setAccountBalance] = useState<string | null>(null);
+  const [allowance, setAllowance] = useState<ethers.BigNumber>(
+    ethers.BigNumber.from(0)
+  );
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
 
   useEffect(() => {
-    const initWalletConnection = async () => {
-      if ((window as any).ethereum) {
-        const ethProvider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        setProvider(ethProvider);
-
-        try {
-          await ethProvider.send("eth_requestAccounts", []);
-          const signer = ethProvider.getSigner();
-          const address = await signer.getAddress();
-          setSigner(signer);
-          setWalletAddress(address);
-          setWalletConnected(true);
-        } catch (error) {
-          console.error("Error connecting to wallet:", error);
-        }
-      }
-    };
-
-    initWalletConnection();
+    connectWallet();
   }, []);
 
   const connectWallet = async () => {
-    if (!provider) {
-      console.error("MetaMask is not installed.");
-      return;
-    }
+    if ((window as any).ethereum) {
+      const ethProvider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+      setProvider(ethProvider);
 
-    try {
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      setWalletAddress(address);
-      setWalletConnected(true);
-    } catch (error) {
-      console.error("Error connecting to wallet:", error);
+      try {
+        const accounts = await ethProvider.send("eth_requestAccounts", []);
+        const signer = ethProvider.getSigner();
+        // const address = accounts[0];
+        const address = await signer.getAddress();
+        setSigner(signer);
+        setWalletAddress(address);
+        setWalletConnected(true);
+      } catch (error) {
+        console.error("Error connecting to wallet:", error);
+      }
+    } else {
+      console.error("No ethereum object found.");
     }
   };
 
@@ -77,25 +63,44 @@ export const WalletConnectionProvider = ({
       provider.removeAllListeners();
     }
     setWalletConnected(false);
-    setWalletAddress("");
+    setWalletAddress(null);
+    setAccountBalance(null);
+    setAllowance(ethers.BigNumber.from(0));
+    setSigner(null);
+    setProvider(null);
   };
 
   const getBalance = async () => {
+    if (!walletAddress) return;
     try {
-      if (!provider) {
-        return;
+      if (provider) {
+        const balance = await provider.getBalance(walletAddress);
+        const formattedBalance = ethers.utils.formatEther(balance);
+        setAccountBalance(formattedBalance);
       }
-      let balance: any = await provider.getBalance(walletAddress);
-      balance = parseFloat(ethers.utils.formatEther(balance));
-      setAccountBalance(balance.toFixed(6));
     } catch (error) {
-      console.log(error);
+      console.error("Error getting balance:", error);
     }
   };
 
   useEffect(() => {
     getBalance();
   }, [walletAddress]);
+
+  useEffect(() => {
+    const ethereum = (window as any).ethereum;
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        console.log("Please connect to MetaMask.");
+      } else if (accounts[0] !== walletAddress) {
+        setWalletAddress(accounts[0]);
+      }
+    };
+    ethereum.on("accountsChanged", handleAccountsChanged);
+    return () => {
+      ethereum.removeListener("accountsChanged", handleAccountsChanged);
+    };
+  });
 
   const walletConnectionContextValue: WalletConnectionContextType = {
     walletConnected,
