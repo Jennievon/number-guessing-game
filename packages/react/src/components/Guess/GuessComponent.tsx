@@ -63,7 +63,7 @@ const GuessComponent = ({
           <h1 className="text-4xl font-bold text-white mb-2">Guess 🎉 </h1>
         )}
       </div>
-      <div className="mb-4">
+      <div className="mb-4 text-white">
         <div className="relative mb-4">
           <label className="text-lg mb-2">
             Number of guesses you want to buy
