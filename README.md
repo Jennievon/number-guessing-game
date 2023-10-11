@@ -19,7 +19,6 @@ In developing this game, the following tools were used:
 * NPX (Node Package Execution, used as a runtime for Hardhat tasks)
 * Hardhat (a complete Ethereum compiler and test deployment environment)
 * Ethers.js (a Web3 Javascript library)
-* Vite (a packaging library, handy for compiling Typescript)
 * Metamask (a popular wallet for crypto tokens and smart contract interaction)
 * Obscuro Testnet (an open, permissionless test network for Obscuro)
 * Obscuro Wallet Extension (a proxy for an Obscuro node, which handles encryption for all data between the wallet and the network)
@@ -42,7 +41,7 @@ npx hardhat clean
 npx hardhat test
 npx hardhat help
 ```
-5. A `.env` file should be created in the project root containing the private keys of the two accounts used by the 
+5. An `.env` file should be created in the project root containing the private keys of the two accounts used by the 
 sample, `APP_DEV_PK` and `END_USR_PK`. A third key `CHEAT_PK` can optionally be included to include the PK of an 
 account that tries to cheat the game using the scripts in `demo-utils`, though this is optional for running of the game
 and primarily used for demo purposes. Should you wish to deploy the game against Arbitrum the API key should also be 
@@ -53,6 +52,8 @@ END_USR_PK=<pk>
 CHEAT_PK=<pk>
 ARB_API_KEY=<key>
 ```
+
+*You can generate private keys at https://iancoleman.io/bip39/I*
 
 ## Running the game against a Hardhat Network
 1. Starting Hardhat with `npx hardhat node` will start a local hardhat network and will deploy the ERC20 token and game 
