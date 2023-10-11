@@ -33,8 +33,8 @@ const Button = ({
   disabled?: boolean;
   onClick?: () => void;
 }) => {
-  const baseButtonClasses = `${className} px-6 py-2 font-bold text-14 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105`;
-  const buttonClasses = ` ${baseButtonClasses} ${
+  const baseButtonClasses = `px-6 py-2 font-bold text-14 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg ${className}`;
+  const buttonClasses = `${baseButtonClasses} ${
     variant ? getButtonClasses(variant) : getButtonClasses("primary")
   } ${rounded ? "rounded-full" : "rounded-lg"} `;
   const disabledClasses = "opacity-50 cursor-not-allowed";

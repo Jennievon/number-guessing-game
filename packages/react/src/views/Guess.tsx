@@ -6,33 +6,8 @@ import { useSnackbar } from "notistack";
 import Button from "../components/Buttons";
 import { useERC20 } from "../contexts/ERC20Context";
 import { useGuess } from "../contexts/GuessContext";
-import styled from "styled-components";
-
-const StyledInputBlock = styled.div`
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 1rem;
-`;
-
-const StyledInput = styled.input`
-  border: none;
-  outline: none;
-  box-shadow: none;
-  font-size: 50px;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  width: 100%;
-  background-color: transparent;
-  color: #fff;
-
-  -webkit-appearance: none;
-  -moz-appearance: textfield;
-
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-`;
+import GuessComponent from "../components/Guess/GuessComponent";
+import SuccessModal from "../components/SuccessModal";
 
 const Guess = () => {
   const { walletConnected, allowance, setAllowance, walletAddress } =
@@ -40,8 +15,11 @@ const Guess = () => {
   const { erc20Contract, approve, symbol } = useERC20();
   const { guessContract, guess } = useGuess();
   const { enqueueSnackbar } = useSnackbar();
+
   const [amount, setAmount] = useState("");
   const [userGuess, setUserGuess] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isWrongGuess, setIsWrongGuess] = useState(false);
 
   useEffect(() => {
     if (erc20Contract && guessContract) {
@@ -70,9 +48,14 @@ const Guess = () => {
       enqueueSnackbar(
         `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
           prize
-        )} OGG.`,
+        )} ${symbol}.`,
         { variant: msg === "correct" ? "success" : "error" }
       );
+      if (msg === "correct") {
+        setShowSuccessModal(true);
+      } else {
+        setIsWrongGuess(true);
+      }
     });
 
     guess(input);
@@ -107,66 +90,26 @@ const Guess = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col justify-between h-full">
-      <div className="mb-4">
-        <div className="mb-4 flex flex-col">
-          <div className="flex items-center">
-            <div>
-              <label className="text-lg mb-2">
-                Number of guesses you want to buy
-              </label>
-              <StyledInputBlock>
-                <StyledInput
-                  type="number"
-                  placeholder="0"
-                  min={0}
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-                <p className="text-gray-400">
-                  {parseFloat(formatEther(allowance))} guesses available
-                </p>
-              </StyledInputBlock>
-            </div>
-            <Button
-              variant="primary"
-              rounded
-              disabled={amount === "" || parseFloat(amount) === 0}
-              onClick={handleApproval}
-              className="w-12 h-12 ml-4 flex items-center justify-center"
-            >
-              <span className="text-2xl text-black">+</span>
-            </Button>
-          </div>
-        </div>
-
-        <div>
-          <label>Guess the secret number</label>
-          <StyledInputBlock>
-            <StyledInput
-              type="number"
-              placeholder="0"
-              value={userGuess}
-              min={0}
-              onChange={(e) => setUserGuess(e.target.value)}
-            />
-            <p className="text-gray-400">Secret Number</p>
-          </StyledInputBlock>
-        </div>
-      </div>
-      <Button
-        rounded
-        onClick={handleGuess}
-        disabled={
-          amount === "" ||
-          parseFloat(amount) === 0 ||
-          !walletConnected ||
-          parseFloat(formatEther(allowance)) < 1
-        }
-      >
-        Guess
-      </Button>
-    </div>
+    <>
+      <GuessComponent
+        handleGuess={handleGuess}
+        amount={amount}
+        setAmount={setAmount}
+        handleApproval={handleApproval}
+        userGuess={userGuess}
+        setUserGuess={setUserGuess}
+        walletConnected={walletConnected}
+        allowance={allowance}
+        isWrongGuess={isWrongGuess}
+        setIsWrongGuess={setIsWrongGuess}
+      />
+      {showSuccessModal && (
+        <SuccessModal
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+        />
+      )}
+    </>
   );
 };
 

@@ -39,3 +39,7 @@ nb-configuration.xml
 *.swp
 
 PROPOSAL.md
+
+
+cypress/screenshots
+cypress/fixtures/example.json

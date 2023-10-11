@@ -19,7 +19,9 @@ module.exports = {
         rotate: "rotate 2s linear infinite",
       },
       fontFamily: {
+        moon: ['"Moon Dance"', "sans-serif"],
         display: ['"DM Sans"', "sans-serif"],
+        body: ['"DM Sans"', "sans-serif"],
       },
       screens: {
         xs: "350px",
