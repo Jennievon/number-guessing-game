@@ -29,6 +29,7 @@ const Guess = () => {
           setAllowance(result);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [erc20Contract, guessContract, walletAddress, walletConnected]);
 
   const guessAgain = () => {
@@ -50,21 +51,30 @@ const Guess = () => {
     const filterGuess = guessContract.filters.GuessResult(walletAddress);
     try {
       await guess(input);
-      guessContract.on(filterGuess, (_, allowance, prize, guess, msg) => {
-        setAllowance(allowance);
-        enqueueSnackbar(
-          `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
-            prize
-          )} ${symbol}.`,
-          { variant: msg === "correct" ? "success" : "error" }
-        );
-        if (msg === "correct") {
-          setShowSuccessModal(true);
-          setUserGuess("");
-        } else {
-          setIsWrongGuess(true);
+      guessContract.on(
+        filterGuess,
+        (
+          _: any,
+          allowance: ethers.BigNumber,
+          prize: ethers.BigNumber,
+          guess: number,
+          msg: string
+        ) => {
+          setAllowance(allowance);
+          enqueueSnackbar(
+            `Your guess of ${guess} was ${msg} ${ethers.utils.formatEther(
+              prize
+            )} ${symbol}.`,
+            { variant: msg === "correct" ? "success" : "error" }
+          );
+          if (msg === "correct") {
+            setShowSuccessModal(true);
+            setUserGuess("");
+          } else {
+            setIsWrongGuess(true);
+          }
         }
-      });
+      );
     } catch (error: any) {
       enqueueSnackbar("Error while attempting to guess: " + error.message, {
         variant: "error",
@@ -80,15 +90,18 @@ const Guess = () => {
       const num = allowance.add(ethers.utils.parseEther(amount));
       await approve(num, guessContract.address);
 
-      erc20Contract.on(filterApproval, (owner, _, value) => {
-        setAllowance(value);
-        enqueueSnackbar(
-          `Approval of ${ethers.utils.formatEther(
-            value
-          )} ${symbol} by account ${owner} to the game was successful.`,
-          { variant: "success" }
-        );
-      });
+      erc20Contract.on(
+        filterApproval,
+        (owner: string, _: any, value: ethers.BigNumber) => {
+          setAllowance(value);
+          enqueueSnackbar(
+            `Approval of ${ethers.utils.formatEther(
+              value
+            )} ${symbol} by account ${owner} to the game was successful.`,
+            { variant: "success" }
+          );
+        }
+      );
 
       setAmount("");
     } catch (error: any) {

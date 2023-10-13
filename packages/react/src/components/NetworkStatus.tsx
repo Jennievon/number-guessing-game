@@ -11,7 +11,7 @@ const StyledNetworkStatus = styled.div<{ show: boolean }>`
   transform: translate(100%, 100%);
   transition: transform 0.3s ease-out 0.3s;
 
-  ${({ show }) =>
+  ${({ show }: { show: boolean }) =>
     show
       ? css`
           transform: translate(0%, 0%);

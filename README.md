@@ -27,13 +27,13 @@ In developing this game, the following tools were used:
 The following steps are required:
 1. Clone this repository into a suitable folder.
 2. Install NPM and NPX, and ensure they are running correctly. This is outside the scope of this project.
-3. Install NPM packages specified in `package.json` by running:
+3. `cd` into the `packages/hardhat` install NPM packages specified in `package.json` by running:
 ```shell
-npm install
-npm install hardhat
+yarn install
+yarn install hardhat
 ```
 4. Hardhat and its dependencies will have been installed in the previous step. More details are available at 
-https://hardhat.org/hardhat-runner/docs/getting-started#overview. Once Hardhat is installed, `cd` into the `packages/hardhat` and run:
+https://hardhat.org/hardhat-runner/docs/getting-started#overview. Once Hardhat is installed, run:
 ```shell
 npx hardhat compile
 ```

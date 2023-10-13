@@ -78,7 +78,7 @@ const GuessComponent = ({
               placeholder="0"
               min={0}
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e: any) => setAmount(e.target.value)}
               disabled={!walletConnected || isWrongGuess}
             />
             <p className="text-gray-400">
@@ -106,7 +106,7 @@ const GuessComponent = ({
               placeholder="0"
               value={userGuess}
               min={0}
-              onChange={(e) => setUserGuess(e.target.value)}
+              onChange={(e: any) => setUserGuess(e.target.value)}
               disabled={
                 !walletConnected ||
                 (allowance ? parseFloat(formatEther(allowance)) < 1 : false) ||
