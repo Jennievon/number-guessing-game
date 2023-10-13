@@ -71,7 +71,7 @@ or any other network.
 
 ![Metamask accounts](./readme-images/metamask-accounts.png)
 
-5. Edit the [index.ts](./src/index.ts) file to ensure the correct contract addresses are being used. Once done, start
+5. Edit the [index.ts](/packages/react/src/libs/utils/constants.ts) file to ensure the correct contract addresses are being used. Once done, start
 the user interface for the game using `npm run dev`.
 
 ![User interface start](./readme-images/user-interface-start.png)
@@ -107,7 +107,7 @@ be available on both accounts and can be obtained using the [Arbitrum faucet ser
 2. Deploy the contracts using `npx hardhat deploy --network arbitrum` and take a note of the contract addresses from the 
 console.
 
-3. Update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](./src/index.ts).
+3. Update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](/packages/react/src/libs/utils/constants.ts).
 
 4. Follow the steps as described previously to approve tokens to the game, and to make a guess!
 
@@ -140,7 +140,7 @@ then request the user to sign a "generate viewing key" transaction.
 5. Deploy the contracts to the Obscuro Testnet using `npx hardhat deploy --network obscuro`. Take a note of the contract
 addresses from the console. 
 
-6. Confirm and update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](./src/index.ts).
+6. Confirm and update the contract addresses `ERC20_ADDRESS` and `GUESS_ADDRESS` in [index.ts](/packages/react/src/libs/utils/constants.ts).
 
 7. Follow the steps as described previously to approve tokens to the game, and to make a guess!
 
